@@ -20,12 +20,6 @@ class ProfileController extends Controller
     public function update(UpdateProfileRequest $request)
     {
         $data = $request->validated();
-        if ($request->has('remove_avatar')) {
-            $data['remove_avatar'] = true;
-        }
-        if ($request->hasFile('avatar')) {
-            $data['avatar'] = $request->file('avatar');
-        }
         $this->service->updateProfile(Auth::id(), $data);
         return back()->with('success', 'Профиль обновлён!');
     }

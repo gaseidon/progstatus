@@ -11,13 +11,8 @@ class UserRepository
         return User::create($data);
     }
 
-    public function findByEmail(string $email): ?User
+    public function find(int $id): ?User
     {
-        return User::where('email', $email)->first();
-    }
-
-    public function find(int $id): ?\App\Models\User
-    {
-        return \App\Models\User::find($id);
+        return User::find($id);
     }
 } 
