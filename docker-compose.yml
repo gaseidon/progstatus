@@ -1,11 +1,12 @@
+version: '3'
 services:
     laravel.test:
         build:
-            context: './vendor/laravel/sail/runtimes/8.4'
+            context: ./vendor/laravel/sail/runtimes/8.4
             dockerfile: Dockerfile
             args:
                 WWWGROUP: '${WWWGROUP}'
-        image: 'sail-8.4/app'
+        image: sail-8.4/app
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         ports:
@@ -66,10 +67,25 @@ services:
             retries: 3
             timeout: 5s
 
+    # 💡 Новый сервис: phpMyAdmin
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        ports:
+            - '8081:80'  # Доступ через http://localhost:8081
+        environment:
+            PMA_HOST: mysql
+            PMA_PORT: 3306
+            PMA_ARBITRARY: 1  # Позволяет вводить любые хосты
+            PMA_USER: '${DB_USERNAME}'
+            PMA_PASSWORD: '${DB_PASSWORD}'
+        depends_on:
+            - mysql
+        networks:
+            - sail
+        restart: always
 networks:
     sail:
         driver: bridge
-
 volumes:
     sail-mysql:
         driver: local
