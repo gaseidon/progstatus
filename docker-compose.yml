@@ -52,6 +52,19 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
+ 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: laravel_phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: root
+    ports:
+      - "8081:80"
+    depends_on:
+      - mysql
 
 volumes:
   mysql_data:
