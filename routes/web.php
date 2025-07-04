@@ -43,6 +43,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile/password', [ProfileController::class, 'changePassword'])->name('profile.password');
     Route::delete('/profile/avatar', [ProfileController::class, 'removeAvatar'])->name('profile.avatar.remove');
-    Route::get('/agents/create', [App\Http\Controllers\AgentController::class, 'create'])->name('agents.create');
+    Route::get('/agents', [App\Http\Controllers\AgentController::class, 'create'])->name('agents');
     Route::post('/agents', [App\Http\Controllers\AgentController::class, 'store'])->name('agents.store');
+    Route::delete('/agents/{id}', [App\Http\Controllers\AgentController::class, 'destroy'])->name('agents.destroy');
+    Route::get('/chat', [App\Http\Controllers\ChatController::class, 'show'])->name('chat');
+    Route::post('/chat/message', [App\Http\Controllers\ChatController::class, 'sendMessage'])->name('chat.message');
 });

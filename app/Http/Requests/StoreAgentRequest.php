@@ -24,4 +24,14 @@ class StoreAgentRequest extends FormRequest
             'description' => 'nullable|string',
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'tools.required' => 'Пожалуйста, выберите хотя бы один инструмент.',
+            'tools.min' => 'Пожалуйста, выберите хотя бы один инструмент.',
+            'interaction.required' => 'Пожалуйста, выберите хотя бы один способ взаимодействия.',
+            'interaction.min' => 'Пожалуйста, выберите хотя бы один способ взаимодействия.',
+        ];
+    }
 } 

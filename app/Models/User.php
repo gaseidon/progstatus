@@ -51,4 +51,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->notify(new \App\Notifications\VerifyEmailCustom);
     }
+
+    public function agents()
+    {
+        return $this->hasMany(\App\Models\Agent::class);
+    }
 }

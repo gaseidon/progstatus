@@ -16,7 +16,7 @@
                 <a href="/login" class="text-gray-700 hover:text-blue-500">Войти</a>
                 <a href="/register" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Регистрация</a>
             @else
-                <div class="relative flex items-center" x-data="{ open: false }">
+                <div class="relative flex items-center" x-data="{ open: false, chatOpen: false }">
                     <button class="flex items-center focus:outline-none transition group" id="profile-menu-button" @click="open = !open">
                         @if(Auth::user()->avatar ?? false)
                             <img src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="avatar" class="w-10 h-10 rounded-full object-cover border-2 border-sky-500 group-hover:border-sky-400 group-hover:bg-sky-50 transition">
@@ -29,6 +29,15 @@
                     </button>
                     <div x-show="open" @click.away="open = false" x-transition class="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg py-2 z-50">
                         <a href="/agents" class="block px-4 py-2 text-gray-700 hover:bg-sky-50">Мои агенты</a>
+                        <a href="/chat" class="block px-4 py-2 text-gray-700 hover:bg-sky-50 cursor-pointer">Чат</a>
+                        <div x-show="chatOpen" @click.away="chatOpen = false" x-transition class="absolute right-52 top-0 w-64 bg-white rounded-xl shadow-lg py-2 z-50 border border-sky-100">
+                            <div class="px-4 py-2 font-semibold text-gray-700 border-b">Выберите агента</div>
+                            <ul>
+                                <li class="px-4 py-2 hover:bg-sky-50 cursor-pointer">Агент 1</li>
+                                <li class="px-4 py-2 hover:bg-sky-50 cursor-pointer">Агент 2</li>
+                                <li class="px-4 py-2 hover:bg-sky-50 cursor-pointer">Агент 3</li>
+                            </ul>
+                        </div>
                         <a href="/profile" class="block px-4 py-2 text-gray-700 hover:bg-sky-50">Профиль</a>
                         <form method="POST" action="/logout">
                             @csrf
@@ -40,3 +49,12 @@
         </div>
     </div>
 </header>
+
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('profileMenu', () => ({
+            open: false,
+            chatOpen: false,
+        }))
+    })
+</script>
