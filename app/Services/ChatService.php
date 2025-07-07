@@ -4,22 +4,6 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-// $data['choices'][0]['message']['content'] = 'Хм, пользователь спрашивает про интегралы, но это явно математическая тема, а не юридическая. 
-
-// В предыдущем взаимодействии я четко обозначил свою специализацию — только юридические вопросы. Пользователь либо не заметил это, либо проверяет границы моей компетенции. 
-
-// Интересно, возможно, он перепутал юридические термины с математическими? Например, мог иметь в виду "интеграцию" в контексте международного права или миграционного законодательства. Но сам запрос слишком краток и не содержит уточнений. 
-
-// Лучший подход — вежливо напомнить о своей специализации, не делая предположений. Если пользователь действительно имел в виду правовой аспект, он уточнит. Важно сохранить нейтральный тон, без раздражения. 
-
-// Кстати, запрос написан с опечатками ("а инртегралы"), что может указывать на спешку или мобильный ввод. Возможно, пользователь просто ошибся разделом. 
-
-// Ответ должен быть однозначным, но оставляющим пространство для уточнения — вдруг за этим стоит какой-то неочевидный правовой вопрос?
-// </think>
-// Я могу отвечать только на юридические вопросы. Интегралы относятся к области математического анализа, и я не обладаю компетенцией для консультаций по этой теме. 
-
-// Если у вас есть вопрос в сфере права (законодательство, судебная практика, договоры, права граждан и т.п.) — задайте его, и я постараюсь помочь.';
-// dd(explode("</think>\n", $data['choices'][0]['message']['content'], 2));
 class ChatService
 {
     public function getUserAgents()
@@ -27,8 +11,11 @@ class ChatService
         return Auth::user()->agents()->get();
     }
 
-    public function sendToExternalAI(string $userMessage): ?string
+    public function sendToExternalAI(string $userMessage, \App\Models\Chat $chat): ?string
     {
+        $agent = $chat->agent;
+        $systemPrompt = $agent->getSystemPrompt();
+
         $client = new \GuzzleHttp\Client();
         $body = [
             'model' => 'deepseek-ai/DeepSeek-R1-0528',
@@ -39,10 +26,10 @@ class ChatService
                 ],
                 [
                     'role' => 'system',
-                    'content' => "Вы — специализированный юридический ассистент. Отвечайте исключительно на юридические вопросы. Если вопрос не касается права, законодательства, судебной практики или правовых норм — сообщите, что вы не можете помочь в этом направлении."
+                    'content' => $systemPrompt
                 ],
             ],
-            '{"max_tokens":100}',
+
         ];
         try {
             $response = $client->request('POST', 'https://api.intelligence.io.solutions/api/v1/chat/completions', [
@@ -58,7 +45,7 @@ class ChatService
             if (isset($data['error'])) {
                 return 'Ошибка API: ' . ($data['error']['message'] ?? json_encode($data['error'], JSON_UNESCAPED_UNICODE));
             }
-     
+
             if (isset($data['choices'][0]['message']['content'])) {
                 $content = $data['choices'][0]['message']['content'];
                 $content = explode("</think>\n", $content);
@@ -66,7 +53,7 @@ class ChatService
                 $content = str_replace('*', '', $content);
                 return $content;
             }
-     
+
             return 'Неожиданный ответ: ' . json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
         } catch (\Exception $e) {
             return 'Ошибка: ' . $e->getMessage();

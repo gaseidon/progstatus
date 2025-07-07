@@ -25,4 +25,17 @@ class Agent extends Model
     {
         return $this->belongsTo(\App\Models\User::class);
     }
+
+    public function getSystemPrompt(): string
+    {
+        $prompt = "Цель: {$this->purpose}. ";
+        $tools = $this->getToolsListAttribute();
+        if (!empty($tools)) {
+            $prompt .= "Инструменты: " . implode(', ', $tools) . ". ";
+        }
+        if (!empty($this->description)) {
+            $prompt .= "Инструкции: {$this->description}";
+        }
+        return trim($prompt);
+    }
 }

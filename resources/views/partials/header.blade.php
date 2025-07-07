@@ -30,14 +30,7 @@
                     <div x-show="open" @click.away="open = false" x-transition class="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-lg py-2 z-50">
                         <a href="/agents" class="block px-4 py-2 text-gray-700 hover:bg-sky-50">Мои агенты</a>
                         <a href="/chat" class="block px-4 py-2 text-gray-700 hover:bg-sky-50 cursor-pointer">Чат</a>
-                        <div x-show="chatOpen" @click.away="chatOpen = false" x-transition class="absolute right-52 top-0 w-64 bg-white rounded-xl shadow-lg py-2 z-50 border border-sky-100">
-                            <div class="px-4 py-2 font-semibold text-gray-700 border-b">Выберите агента</div>
-                            <ul>
-                                <li class="px-4 py-2 hover:bg-sky-50 cursor-pointer">Агент 1</li>
-                                <li class="px-4 py-2 hover:bg-sky-50 cursor-pointer">Агент 2</li>
-                                <li class="px-4 py-2 hover:bg-sky-50 cursor-pointer">Агент 3</li>
-                            </ul>
-                        </div>
+                        
                         <a href="/profile" class="block px-4 py-2 text-gray-700 hover:bg-sky-50">Профиль</a>
                         <form method="POST" action="/logout">
                             @csrf

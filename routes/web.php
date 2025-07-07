@@ -48,4 +48,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/agents/{id}', [App\Http\Controllers\AgentController::class, 'destroy'])->name('agents.destroy');
     Route::get('/chat', [App\Http\Controllers\ChatController::class, 'show'])->name('chat');
     Route::post('/chat/message', [App\Http\Controllers\ChatController::class, 'sendMessage'])->name('chat.message');
+    Route::post('/api/chats', [App\Http\Controllers\ChatController::class, 'apiCreate'])->name('api.chats.create');
+    Route::get('/api/chats/{chat}/messages', [App\Http\Controllers\ChatController::class, 'apiMessages'])->name('api.chats.messages');
+    Route::post('/api/chats/{chat}/clear', [\App\Http\Controllers\ChatController::class, 'clearHistory'])->middleware('auth');
 });
