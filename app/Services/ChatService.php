@@ -22,12 +22,12 @@ class ChatService
             'messages' => [
                 [
                     'role' => 'user',
-                    'content' => $userMessage
+                    'content' => "Инструкция: {$systemPrompt}\n\nСообщение пользователя: {$userMessage}"
                 ],
-                [
-                    'role' => 'system',
-                    'content' => $systemPrompt
-                ],
+                // [
+                //     'role' => 'system',
+                //     'content' => 'You are a helpful assistant.'
+                // ],
             ],
 
         ];
